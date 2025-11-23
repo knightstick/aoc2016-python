@@ -25,7 +25,7 @@ def main():
 
 def run(input: str, keypad_move: KeypadMove | None = None) -> str:
     if keypad_move is None:
-        keypad_move = keypad_move_nine
+        keypad_move = _keypad_move_nine
 
     lines: list[list[Instruction]] = [
         [parse_instruction(c) for c in line] for line in input.split()
@@ -59,7 +59,7 @@ def _next_number_to_press(
     return pos
 
 
-def keypad_move_nine(pos: KeypadNumber, instruction: Instruction) -> KeypadNumber:
+def _keypad_move_nine(pos: KeypadNumber, instruction: Instruction) -> KeypadNumber:
     # 1 2 3
     # 4 5 6
     # 7 8 9
