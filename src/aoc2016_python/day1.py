@@ -57,9 +57,10 @@ def _move_one(state: State, direction: Direction) -> State:
     (north, east), _ = state
     new_heading = turn(state, direction)
     (dn, de) = direction_vector(new_heading)
-    i = steps(direction)
 
-    return State(Location(north + dn * i, east + de * i), new_heading)
+    return State(
+        Location(north + dn * direction.steps, east + de * direction.steps), new_heading
+    )
 
 
 def move_with_revisit(directions: list[Direction]) -> Iterator[Location]:
@@ -84,18 +85,10 @@ def _moves(state: State, direction: Direction) -> tuple[list[Location], State]:
     (dn, de) = direction_vector(new_heading)
 
     path = [
-        Location(north + dn * i, east + de * i) for i in range(1, steps(direction) + 1)
+        Location(north + dn * i, east + de * i) for i in range(1, direction.steps + 1)
     ]
 
     return (path, State(path[-1], new_heading))
-
-
-def steps(direction: Direction) -> int:
-    match direction:
-        case Right(steps):
-            return steps
-        case Left(steps):
-            return steps
 
 
 def turn(state: State, direction: Direction) -> Heading:
@@ -122,7 +115,7 @@ def turn(state: State, direction: Direction) -> Heading:
             raise RuntimeError(f"Unhandled turn: {heading, direction}")
 
 
-def direction_vector(heading) -> tuple[int, int]:
+def direction_vector(heading: Heading) -> tuple[int, int]:
     match heading:
         case "N":
             return (1, 0)
